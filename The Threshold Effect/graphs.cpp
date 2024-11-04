@@ -57,11 +57,6 @@ bool Graph::has_edge() const {
 
 bool Graph::has_triangle() const {
 	int n = V.size();
-	vector<vector<bool>> adj(n, vector<bool>(n, false));			// Construct Adjecency Matrix
-	for (const Edge& edge : E) {
-		adj[edge.v1][edge.v2] = true;
-		adj[edge.v2][edge.v1] = true;  
-	}
 	for (int i = 0; i < n; i++) {									// Search for Triangles
 		for (int j = i + 1; j < n; j++) {
 			if (adj[i][j]) {
