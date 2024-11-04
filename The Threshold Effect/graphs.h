@@ -24,6 +24,7 @@ class Graph {
 public:
 	vector<Vertex> V;
 	vector<Edge> E;
+	vector<vector<bool>> adj;
 
 	Graph() : V(), E(){}
 	Graph(const vector<Vertex>& Vertices, const vector<Edge>& Edges) : V(Vertices), E(Edges) {}
@@ -31,5 +32,7 @@ public:
 
 	void print() const;									// Print the Graph's Contents
 	void gen_rand_graph(int n, float p);				// Generate Random Graphs
+	bool has_edge() const;								// Check if the Graph has an Edge
+	bool has_triangle() const;							// Check if the Graph has a Triangle Subgraph
 };
 

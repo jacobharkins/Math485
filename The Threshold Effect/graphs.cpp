@@ -1,18 +1,6 @@
 #include "graphs.h"
+#include <ctime>
 using namespace std;
-
-
-void Graph::gen_rand_graph(int n, float p) {
-	for (int i = 0; i < n; i++) {
-		this->V.push_back(Vertex(i));
-		for (int j = i + 1; j < n; j++) {
-			if (float(rand()) / RAND_MAX < p) {
-
-				this->E.push_back(Edge(i, j));
-			}
-		}
-	}
-}
 
 
 void Edge::print() const {
@@ -32,7 +20,7 @@ void Graph::print() const {
 		cout << ", ";
 	}
 	cout << "}" << endl;
-	cout << "-------------------------------------------------------" << endl;
+	cout << "--------------------------------------------------------------------------------------------------------------" << endl;
 
 	cout << "E(G): {";
 	for (const Edge& e : E) {
@@ -40,5 +28,50 @@ void Graph::print() const {
 		cout << ",";
 	}
 	cout << "}" << endl;
-	cout << "========================================================" << endl;
+	cout << "--------------------------------------------------------------------------------------------------------------" << endl;
+	cout << "Has an edge? " << has_edge() << endl;
+	cout << "Has a triangle subgraph? " << has_triangle() << endl;
+	cout << endl << "##########################################################################" << endl;
+}
+
+
+void Graph::gen_rand_graph(int n, float p) {
+	adj = vector<vector<bool>>(n, vector<bool>(n, false));
+
+	for (int i = 0; i < n; i++) {
+		V.push_back(Vertex(i));
+		for (int j = i + 1; j < n; j++) {
+			if (float(rand()) / RAND_MAX < p) {
+				E.push_back(Edge(i, j));
+				adj[i][j] = true;
+				adj[j][i] = true;
+			}
+		}
+	}
+}
+
+
+bool Graph::has_edge() const {
+	return bool(size(E));
+}
+
+bool Graph::has_triangle() const {
+	int n = V.size();
+	vector<vector<bool>> adj(n, vector<bool>(n, false));			// Construct Adjecency Matrix
+	for (const Edge& edge : E) {
+		adj[edge.v1][edge.v2] = true;
+		adj[edge.v2][edge.v1] = true;  
+	}
+	for (int i = 0; i < n; i++) {									// Search for Triangles
+		for (int j = i + 1; j < n; j++) {
+			if (adj[i][j]) {
+				for (int k = j + 1; k < n; k++) {
+					if (adj[i][k] && adj[j][k]) {
+						return true;
+					}
+				}
+			}
+		}
+	}
+	return false;
 }
